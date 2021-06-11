@@ -132,7 +132,18 @@ class Josephus
 
       //System.out.println ("-> Last Living soldier: " + currSoldier);
 
-      return currSoldier + 1; // Convert array index to Count
+
+      currSoldier = currSoldier + 1; // Convert array index to Count
+
+      if (currSoldier != crossCheckWinner(numSoldiers) )
+      {
+         System.out.println ("ERROR: there is an error in your code Moose !!");
+         System.out.println ("-> getWinner()        returned: " + currSoldier);
+         System.out.println ("-> crossCheckWinner() returned: " + crossCheckWinner(numSoldiers));
+         System.out.println ("-> Oooops !");
+      }
+
+      return currSoldier;
    }
 
    public String toString()
@@ -152,6 +163,24 @@ class Josephus
 
       return sb.toString();
    }
+
+   public static int crossCheckWinner(int numSoldiers)
+   {
+      int highestPowerOfTwo      = 0;
+      int highestPowerOfTwoValue = 0;
+
+      while (Math.pow (2, highestPowerOfTwo) <= numSoldiers)
+      {
+         highestPowerOfTwoValue = (int) Math.pow (2, highestPowerOfTwo);
+         highestPowerOfTwo++;
+      }
+
+      int remainder = numSoldiers - highestPowerOfTwoValue;
+
+      int winner    = (2 * remainder) + 1;
+
+      return winner;
+   }
 }
 
 
@@ -162,13 +191,14 @@ public class JosephusProblem
       Josephus josephus = new Josephus (5);
 
       //System.out.println (5 + ": " + josephus.getWinner () );
+      //System.out.println (Josephus.crossCheckWinner(2) );
+      //System.out.println (Josephus.crossCheckWinner(41) ); // 19 = correct
 
-
-      for (int numSoldiers = 1; numSoldiers <= 20; numSoldiers++)
+      for (int s = 1; s <= 20; s++)
       {
-         josephus = new Josephus (numSoldiers);
+         josephus = new Josephus (s);
 
-         System.out.println (numSoldiers + ": " + josephus.getWinner() +
+         System.out.println (s + ": " + josephus.getWinner() +
                              "  -> " + josephus.toString() );
       }
 
