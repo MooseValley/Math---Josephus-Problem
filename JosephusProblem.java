@@ -164,7 +164,7 @@ class Josephus
       return sb.toString();
    }
 
-   public static int crossCheckWinner(int numSoldiers)
+   public static int crossCheckWinner (int numSoldiers)
    {
       int highestPowerOfTwo      = 0;
       int highestPowerOfTwoValue = 0;
@@ -181,6 +181,29 @@ class Josephus
 
       return winner;
    }
+
+   public static int crossCheckWinnerFast (int numSoldiers)
+   {
+      /*
+      Near the end of the video he shows this trick:
+
+      If 41 soldiers, 41 in binary is: 101001
+      We do a ROL - roll left, where the binary digits are all moved 1 space to
+      the left, and then move the most significant bit (was the left most bit) to the far right.
+
+      Winner = ROL 101001 = 010011 = 19
+      */
+      String binaryStr  = Integer.toString (numSoldiers, 2); // Base 2  = binary
+      char firstDigit = binaryStr.charAt (0);
+
+      String winnerStr = binaryStr.substring (1, binaryStr.length()) + firstDigit;
+
+      int winner = Integer.parseUnsignedInt (winnerStr, 2);
+
+      //System.out.println ("binaryStr: " + binaryStr + " -> winnerStr: " + winnerStr);
+
+      return winner;
+   }
 }
 
 
@@ -190,16 +213,29 @@ public class JosephusProblem
    {
       Josephus josephus = new Josephus (5);
 
+      //System.out.println (Josephus.crossCheckWinnerFast (41) );
+
+
       //System.out.println (5 + ": " + josephus.getWinner () );
       //System.out.println (Josephus.crossCheckWinner(2) );
       //System.out.println (Josephus.crossCheckWinner(41) ); // 19 = correct
 
-      for (int s = 1; s <= 20; s++)
+      for (int s = 1; s <= 21; s++)
       {
          josephus = new Josephus (s);
 
-         System.out.println (s + ": " + josephus.getWinner() +
-                             "  -> " + josephus.toString() );
+         System.out.println (s + "\t" + josephus.getWinner() +
+                             "," + Josephus.crossCheckWinner (s) +
+                             "," + Josephus.crossCheckWinnerFast (s) +
+                             " -> " + josephus.toString() +
+                             "");
+      }
+
+      for (int s = 1; s <= 500; s++)
+      {
+         josephus = new Josephus (s);
+
+         System.out.println (s + "\t" + Josephus.crossCheckWinnerFast (s) );
       }
 
    }
